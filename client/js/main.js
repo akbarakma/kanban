@@ -1,28 +1,60 @@
+const base_url = 'http://localhost:3000';
+
 let app = new Vue({
     el: '#app',
     data: {
         task: [],
-        isLogin: false,
-        seen: true,
-        SignUpPage: false,
-        login_email: null,
-        login_password: null,
-        register_email: null,
-        register_password: null,
-        register_password_confirm: null
+        page:'login',
+        login_email: '',
+        login_password: '',
+        register_email: '',
+        register_password: '',
+        register_password_confirm: ''
+    },
+    created() {
+        if (localStorage.getItem('token')) {
+            this.page = 'main';
+        }
     },
     methods: {
         signUpForm() {
-            this.SignUpPage = true;
+            this.page = 'register';
         },
         loginForm() {
-            this.SignUpPage = false;
+            this.page = 'login';
         },
         loginUser() {
-            loginUserApi(this.login_email, this.login_password);
+            let obj = {
+                email: this.login_email,
+                password: this.login_password
+            };
+            axios({
+                method: 'POST',
+                url: base_url + '/login',
+                data: obj
+            })
+            .then(({ data }) => {
+                localStorage.setItem('token', data.token);
+                this.page = 'main';
+                this.login_email = '';
+                this.login_password = '';
+            }).catch(err => {
+                if (err.response) {
+                    // jangan lupa di modal
+                    console.log(err.response.data.msg);
+                } else if (err.request) {
+                    console.log(err.request);
+                } else {
+                    console.log('Error', err.message);
+                }
+            });
         },
         registerUser() {
             console.log(this.register_email, this.register_password, this.register_password_confirm);
+        },
+        logOutUser() {
+            localStorage.removeItem('token');
+            this.page = 'login';
         }
     }
 })

@@ -6,32 +6,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Kanban</title>
 </head>
-<body style="background-image: url('img/background-main.jpg'); background-size: 100%; background-repeat: no-repeat;">
+<body style="background-image: url('img/background-main.jpg'); background-size: cover; background-repeat: no-repeat; height: 100vh; width: 100%;">
     <div id="app">
-        <div id="navbar-page" v-if="isLogin ? seen : ''">
-            <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3">
-                <a class="navbar-brand text-light" href="">Kanban</a>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <button class="btn btn-primary mr-2" href="">Home <span class="sr-only">(current)</span></button>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary mr-2" href="">Add Task</a>
-                        </li>
-                    </ul>
-                </div>
-                <button class="btn btn-info">Sign Out</button>
-            </nav>
-        </div>
-        <div class="text-center m-5 title-form">
-            <h1>Welcome to Kanban !</h1>
-        </div>
-        <!--  NAVBAR DIATAS  -->
     
         <!--LOGIN-->
         
-        <div class="login-form" v-if="!isLogin && !SignUpPage ? seen : ''">
+        <div class="login-form" v-if="page === 'login'">
+            <div class="text-center m-5 title-form">
+                <h1>Welcome to Kanban !</h1>
+            </div>
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="card p-5">
@@ -56,7 +39,10 @@
     
         <!--REGISTER-->
     
-        <div class="register-form" v-if="!isLogin && SignUpPage ? seen : ''">
+        <div class="register-form" v-if="page === 'register'">
+            <div class="text-center m-5 title-form">
+                <h1>Welcome to Kanban !</h1>
+            </div>
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="card p-5">
@@ -87,7 +73,27 @@
         
 
         <!--MAIN PAGE-->
-        <div v-if="isLogin ? seen : ''">
+        <div v-if="page === 'main'">
+            <div id="navbar-page">
+                <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3">
+                    <a class="navbar-brand text-light" href="">Kanban</a>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <button class="btn btn-primary mr-2" href="">Home <span class="sr-only">(current)</span></button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary mr-2" href="">Add Task</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-info" v-on:click.prevent="logOutUser">Sign Out</button>
+                </nav>
+            </div>
+        <!--  NAVBAR DIATAS  -->
+            <div class="text-center m-5 title-form">
+                <h1>Welcome to Kanban !</h1>
+            </div>
             <div class="container">
                 <div class="d-flex flex-row justify-content-center">
                     <div class="col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4" style="height: 100%; background-color: #c7fff5">
@@ -170,7 +176,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./js/request.js"></script>
     <script src="./js/main.js"></script>
 </body>
 </html>
