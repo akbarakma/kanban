@@ -52,15 +52,22 @@ let app = new Vue({
     },
     methods: {
         signUpForm() {
+            this.reset();
             this.page = 'register';
         },
         loginForm() {
+            this.reset();
             this.page = 'login';
         },
         addTaskForm() {
             this.page = 'create-task';
         },
-        mainPage() {
+        reset() {
+            this.login_email = '';
+            this.login_password = '';
+            this.register_email = '';
+            this.register_password = '';
+            this.register_password_confirm = '';
             this.task_title = '';
             this.task_description = '';
             this.task_category = 'Back-Log';
@@ -68,6 +75,8 @@ let app = new Vue({
             this.edit_description = '';
             this.edit_category = '';
             this.edit_id = '';
+        },
+        mainPage() {
             this.getAllTask();
             this.page = 'main';
         },
@@ -83,24 +92,34 @@ let app = new Vue({
             })
             .then(({ data }) => {
                 localStorage.setItem('token', data.token);
-                this.page = 'main';
-                this.login_email = '';
-                this.login_password = '';
-                this.getAllTask();
+                this.reset();
+                this.mainPage();
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    onOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Signed in successfully'
+                })
             }).catch(err => {
-                if (err.response) {
-                    // jangan lupa di modal
-                    console.log(err.response.data.msg);
-                } else if (err.request) {
-                    console.log(err.request);
-                } else {
-                    console.log('Error', err.message);
-                }
+                showError(err);
             });
         },
         registerUser() {
             if (this.register_password !== this.register_password_confirm) {
-                console.log('Make sure you input the same password');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Make sure you input the same password'
+                  })
             } else {
                 let obj = {
                     email: this.register_email,
@@ -112,25 +131,33 @@ let app = new Vue({
                     data: obj
                 })
                 .then(() => {
+                    this.reset();
                     this.page = 'login';
-                    this.register_email = '';
-                    this.register_password = '';
-                    this.register_password_confirm = '';
                 }).catch(err => {
-                    if (err.response) {
-                        // jangan lupa di modal
-                        console.log(err.response.data.msg);
-                    } else if (err.request) {
-                        console.log(err.request);
-                    } else {
-                        console.log('Error', err.message);
-                    }
+                    showError(err);
                 });
             }
         },
         logOutUser() {
             localStorage.removeItem('token');
+            this.reset();
             this.page = 'login';
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+            
+            Toast.fire({
+                icon: 'success',
+                title: 'Log out successfully'
+            })
         },
         getAllTask() {
             axios({
@@ -146,36 +173,40 @@ let app = new Vue({
                     this.task.push(x);
                 })
             }).catch(err => {
-                if (err.response) {
-                    // jangan lupa di modal
-                    console.log(err.response.data.msg);
-                } else if (err.request) {
-                    console.log(err.request);
-                } else {
-                    console.log('Error', err.message);
-                }
+                showError(err);
             });
         },
         deleteData(id) {
-            axios({
-                method: 'DELETE',
-                url: base_url + `/tasks/${id}`,
-                headers: {
-                    token: localStorage.getItem('token')
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.value) {
+                    axios({
+                        method: 'DELETE',
+                        url: base_url + `/tasks/${id}`,
+                        headers: {
+                            token: localStorage.getItem('token')
+                        }
+                    })
+                    .then(() => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                        this.reset();
+                        this.mainPage();
+                    }).catch(err => {
+                        showError(err);
+                    });
                 }
-            })
-            .then(() => {
-                this.getAllTask();
-            }).catch(err => {
-                if (err.response) {
-                    // jangan lupa di modal
-                    console.log(err.response.data.msg);
-                } else if (err.request) {
-                    console.log(err.request);
-                } else {
-                    console.log('Error', err.message);
-                }
-            });
+              })
         },
         createTask() {
             let obj = {
@@ -192,20 +223,10 @@ let app = new Vue({
                 data: obj
             })
             .then(() => {
-                this.task_title = '';
-                this.task_description = '';
-                this.task_category = '';
-                this.page = 'main';
-                this.getAllTask();
+                this.reset();
+                this.mainPage();
             }).catch(err => {
-                if (err.response) {
-                    // jangan lupa di modal
-                    console.log(err.response.data.msg);
-                } else if (err.request) {
-                    console.log(err.request);
-                } else {
-                    console.log('Error', err.message);
-                }
+                showError(err);
             });
         },
         editDataForm(id) {
@@ -223,14 +244,7 @@ let app = new Vue({
                 this.edit_id = data.id;
                 this.page = 'edit-task';
             }).catch(err => {
-                if (err.response) {
-                    // jangan lupa di modal
-                    console.log(err.response.data.msg);
-                } else if (err.request) {
-                    console.log(err.request);
-                } else {
-                    console.log('Error', err.message);
-                }
+                showError(err);
             });
         },
         editData() {
@@ -248,21 +262,10 @@ let app = new Vue({
                 data: obj
             })
             .then(() => {
-                this.edit_title = '';
-                this.edit_description = '';
-                this.edit_category = '';
-                this.edit_id = '';
-                this.getAllTask();
-                this.page = 'main';
+                this.reset();
+                this.mainPage();
             }).catch(err => {
-                if (err.response) {
-                    // jangan lupa di modal
-                    console.log(err.response.data.msg);
-                } else if (err.request) {
-                    console.log(err.request);
-                } else {
-                    console.log('Error', err.message);
-                }
+                showError(err);
             });
         }
     }
