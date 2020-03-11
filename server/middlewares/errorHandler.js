@@ -28,6 +28,11 @@ function errorHandler(err, req, res, next) {
             status: 401,
             msg: err.message
         })
+    } else if (err.name === 'SequelizeUniqueConstraintError') {
+        res.status(400).json({
+            status: 400,
+            msg: 'Your Email has already been registered'
+        })
     }
     else {
         console.log(err);
