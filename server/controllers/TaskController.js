@@ -4,7 +4,7 @@ const createError = require('../helpers/createError');
 class TaskController {
     static showTask (req, res, next) {
         let id = Number(req.UserData.id);
-        Task.findAll({ where: { id } })
+        Task.findAll({ where: { UserId: id } })
             .then(data => {
                 res.status(200).json(data);
             }).catch(err => {
