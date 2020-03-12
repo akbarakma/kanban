@@ -42,6 +42,8 @@ export default Vue.extend({
     },
     methods: {
         signUpForm() {
+            this.login_email = ''
+            this.login_password = ''
             this.$emit('changePage', 'register');
         },
         loginUser() {

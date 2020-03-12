@@ -3,120 +3,26 @@
     <!--LOGIN-->
     
     <login 
-    v-if="page === 'login'"
-    @changePage="changePage"
-    @loginUser="loginUser"
-    @showError="showError"
+        v-if="page === 'login'"
+        @changePage="changePage"
+        @loginUser="loginUser"
+        @showError="showError"
     ></login>
 
     <!--REGISTER-->
 
     <register
-    v-if="page === 'register'"
-    @changePage="changePage"
-    @showError="showError"
+        v-if="page === 'register'"
+        @changePage="changePage"
+        @showError="showError"
     ></register>
 
     <!--MAIN PAGE-->
-    <div v-if="page === 'main'">
-        <div id="navbar-page">
-            <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3">
-                <a class="navbar-brand text-light" v-on:click.prevent="mainPage" href="">Kanban</a>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="btn btn-primary mr-2" href="" v-on:click.prevent="addTaskForm">Add Task</a>
-                        </li>
-                    </ul>
-                </div>
-                <button class="btn btn-info" v-on:click.prevent="logOutUser">Sign Out</button>
-            </nav>
-        </div>
-        <!--  NAVBAR DIATAS  -->
-        <div class="text-center m-5 title-form">
-            <h1>Welcome to Kanban !</h1>
-        </div>
-        <div class="container">
-            <div class="d-flex flex-row justify-content-center">
-                <div class="col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4" style="height: 100%; background-color: #c7fff5">
-                    <div class="container">
-                        <div class="bg-danger rounded">
-                            <div class="text-center m-3 p-2">
-                                <h2>Back-Log</h2>
-                            </div>
-                        </div>
-                        <div class="overflow-auto" style="max-height: 60vh;">
-                            <div class="card mb-2" :key="task.id" v-for="task in backlogData">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ task.title }}</h5>
-                                    <p class="card-text">{{ task.description }}</p>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="editDataForm(task.id)">Edit</a>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="deleteData(task.id)">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4" style="height: 100%; background-color: #c7fff5">
-                    <div class="container">
-                        <div class="bg-warning rounded">
-                            <div class="text-center m-3 p-2">
-                                <h2>To-Do</h2>
-                            </div>
-                        </div>
-                        <div class="overflow-auto" style="max-height: 60vh;">
-                            <div class="card mb-2" :key="task.id" v-for="task in todoData">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ task.title }}</h5>
-                                    <p class="card-text">{{ task.description }}</p>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="editDataForm(task.id)">Edit</a>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="deleteData(task.id)">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4" style="height: 100%; background-color: #c7fff5">
-                    <div class="container">
-                        <div class="bg-primary rounded">
-                            <div class="text-center m-3 p-2">
-                                <h2>Done</h2>
-                            </div>
-                        </div>
-                        <div class="overflow-auto" style="max-height: 60vh;">
-                            <div class="card mb-2" :key="task.id" v-for="task in doneData">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ task.title }}</h5>
-                                    <p class="card-text">{{ task.description }}</p>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="editDataForm(task.id)">Edit</a>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="deleteData(task.id)">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4" style="height: 100%; background-color: #c7fff5">
-                    <div class="container">
-                        <div class="bg-success rounded">
-                            <div class="text-center m-3 p-2">
-                                <h2>Completed</h2>
-                            </div>
-                        </div>
-                        <div class="overflow-auto" style="max-height: 60vh;">
-                            <div class="card mb-2" :key="task.id" v-for="task in completedData">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ task.title }}</h5>
-                                    <p class="card-text">{{ task.description }}</p>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="editDataForm(task.id)">Edit</a>
-                                    <a href="" class="btn btn-primary" v-on:click.prevent="deleteData(task.id)">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
+    <mainPage v-if="page === 'main'"
+        @showError="showError"
+        @logOutUser="logOutUser"
+    ></mainPage>
 
     <!--CREATE TASK-->
 
@@ -227,16 +133,17 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import login from './components/login.vue';
 import register from './components/register.vue';
+import mainPage from './components/main.vue';
 const base_url = 'http://localhost:3000';
 
 export default Vue.extend({
     components: {
         login,
-        register
+        register,
+        mainPage
     },
     data() {
         return {
-            task: [],
             page:'login',
             task_title: '',
             task_description: '',
@@ -250,33 +157,7 @@ export default Vue.extend({
     created() {
         if (localStorage.getItem('token')) {
             this.page = 'main';
-            this.getAllTask();
-        }
-    },
-    computed: {
-        backlogData() {
-            let data = this.task.filter(x => {
-                return x.category === 'Back-Log'
-            });
-            return data;
-        },
-        todoData() {
-            let data = this.task.filter(x => {
-                return x.category === 'To-Do'
-            });
-            return data;
-        },
-        doneData() {
-            let data = this.task.filter(x => {
-                return x.category === 'Done'
-            });
-            return data;
-        },
-        completedData() {
-            let data = this.task.filter(x => {
-                return x.category === 'Completed'
-            });
-            return data;
+            // this.getAllTask();
         }
     },
     methods: {
@@ -288,7 +169,7 @@ export default Vue.extend({
         },
         loginUser(data){
             localStorage.setItem('token', data.token);
-            this.mainPage();
+            this.page = 'main';
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -320,38 +201,11 @@ export default Vue.extend({
             this.edit_id = '';
         },
         mainPage() {
-            this.getAllTask();
             this.page = 'main';
         },
-        registerUser() {
-            if (this.register_password !== this.register_password_confirm) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Make sure you input the same password'
-                  })
-            } else {
-                let obj = {
-                    email: this.register_email,
-                    password: this.register_password
-                }
-                axios({
-                    method: 'POST',
-                    url: base_url + '/register',
-                    data: obj
-                })
-                .then(() => {
-                    this.reset();
-                    this.page = 'login';
-                }).catch(err => {
-                    this.showError(err);
-                });
-            }
-        },
-        logOutUser() {
+        logOutUser(page) {
             localStorage.removeItem('token');
-            this.reset();
-            this.page = 'login';
+            this.page = page;
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -363,60 +217,10 @@ export default Vue.extend({
                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
             })
-            
             Toast.fire({
                 icon: 'success',
                 title: 'Log out successfully'
             })
-        },
-        getAllTask() {
-            axios({
-                method: 'GET',
-                url: base_url + '/tasks',
-                headers: {
-                    token: localStorage.getItem('token')
-                }
-            })
-            .then(({ data }) => {
-                this.task = [];
-                data.forEach(x => {
-                    this.task.push(x);
-                })
-            }).catch(err => {
-                this.showError(err);
-            });
-        },
-        deleteData(id) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-              }).then((result) => {
-                if (result.value) {
-                    axios({
-                        method: 'DELETE',
-                        url: base_url + `/tasks/${id}`,
-                        headers: {
-                            token: localStorage.getItem('token')
-                        }
-                    })
-                    .then(() => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                        this.reset();
-                        this.mainPage();
-                    }).catch(err => {
-                        this.showError(err);
-                    });
-                }
-              })
         },
         createTask() {
             let obj = {

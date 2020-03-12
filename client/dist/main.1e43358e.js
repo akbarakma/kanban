@@ -13662,6 +13662,8 @@ exports.default = vue_1.default.extend({
   },
   methods: {
     signUpForm: function signUpForm() {
+      this.login_email = '';
+      this.login_password = '';
       this.$emit('changePage', 'register');
     },
     loginUser: function loginUser() {
@@ -13869,7 +13871,7 @@ exports.default = vue_1.default.extend({
   },
   methods: {
     loginForm: function loginForm() {
-      this.$emit('changeForm', 'login');
+      this.$emit('changePage', 'login');
     },
     registerUser: function registerUser() {
       var _this = this;
@@ -14143,7 +14145,7 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"src/App.vue":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"src/components/main.vue":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -14162,34 +14164,15 @@ var axios_1 = __importDefault(require("axios"));
 
 var sweetalert2_1 = __importDefault(require("sweetalert2"));
 
-var login_vue_1 = __importDefault(require("./components/login.vue"));
-
-var register_vue_1 = __importDefault(require("./components/register.vue"));
-
 var base_url = 'http://localhost:3000';
 exports.default = vue_1.default.extend({
-  components: {
-    login: login_vue_1.default,
-    register: register_vue_1.default
-  },
   data: function data() {
     return {
-      task: [],
-      page: 'login',
-      task_title: '',
-      task_description: '',
-      task_category: 'Back-Log',
-      edit_title: '',
-      edit_description: '',
-      edit_category: '',
-      edit_id: ''
+      task: []
     };
   },
   created: function created() {
-    if (localStorage.getItem('token')) {
-      this.page = 'main';
-      this.getAllTask();
-    }
+    this.getAllTask();
   },
   computed: {
     backlogData: function backlogData() {
@@ -14218,6 +14201,537 @@ exports.default = vue_1.default.extend({
     }
   },
   methods: {
+    getAllTask: function getAllTask() {
+      var _this = this;
+
+      axios_1.default({
+        method: 'GET',
+        url: base_url + '/tasks',
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      }).then(function (_a) {
+        var data = _a.data;
+        _this.task = [];
+        data.forEach(function (x) {
+          _this.task.push(x);
+        });
+      }).catch(function (err) {
+        _this.$emit('showError', err);
+      });
+    },
+    mainPage: function mainPage() {
+      this.$emit('changePage', 'main');
+    },
+    logOutUser: function logOutUser() {
+      this.$emit('logOutUser', 'login');
+    },
+    editDataForm: function editDataForm(id) {// tar dulu yaa
+    },
+    deleteData: function deleteData(id) {
+      var _this = this;
+
+      sweetalert2_1.default.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          axios_1.default({
+            method: 'DELETE',
+            url: base_url + ("/tasks/" + id),
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }).then(function () {
+            sweetalert2_1.default.fire('Deleted!', 'Your file has been deleted.', 'success');
+
+            _this.getAllTask();
+          }).catch(function (err) {
+            _this.$emit('showError', err);
+          });
+        }
+      });
+    }
+  }
+});
+        var $216e08 = exports.default || module.exports;
+      
+      if (typeof $216e08 === 'function') {
+        $216e08 = $216e08.options;
+      }
+    
+        /* template */
+        Object.assign($216e08, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { attrs: { id: "navbar-page" } }, [
+      _c(
+        "nav",
+        { staticClass: "navbar navbar-expand-lg navbar-light bg-dark mb-3" },
+        [
+          _c(
+            "a",
+            {
+              staticClass: "navbar-brand text-light",
+              attrs: { href: "" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.mainPage($event)
+                }
+              }
+            },
+            [_vm._v("Kanban")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse navbar-collapse",
+              attrs: { id: "navbarNav" }
+            },
+            [
+              _c("ul", { staticClass: "navbar-nav" }, [
+                _c("li", { staticClass: "nav-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-primary mr-2",
+                      attrs: { href: "" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.addTaskForm($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Add Task")]
+                  )
+                ])
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-info",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.logOutUser($event)
+                }
+              }
+            },
+            [_vm._v("Sign Out")]
+          )
+        ]
+      )
+    ]),
+    _vm._v(" "),
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "d-flex flex-row justify-content-center" }, [
+        _c(
+          "div",
+          {
+            staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
+            staticStyle: { height: "100%", "background-color": "#c7fff5" }
+          },
+          [
+            _c("div", { staticClass: "container" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "overflow-auto",
+                  staticStyle: { "max-height": "60vh" }
+                },
+                _vm._l(_vm.backlogData, function(task) {
+                  return _c("div", { key: task.id, staticClass: "card mb-2" }, [
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("h5", { staticClass: "card-title" }, [
+                        _vm._v(_vm._s(task.title))
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "card-text" }, [
+                        _vm._v(_vm._s(task.description))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editDataForm(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteData(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
+            staticStyle: { height: "100%", "background-color": "#c7fff5" }
+          },
+          [
+            _c("div", { staticClass: "container" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "overflow-auto",
+                  staticStyle: { "max-height": "60vh" }
+                },
+                _vm._l(_vm.todoData, function(task) {
+                  return _c("div", { key: task.id, staticClass: "card mb-2" }, [
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("h5", { staticClass: "card-title" }, [
+                        _vm._v(_vm._s(task.title))
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "card-text" }, [
+                        _vm._v(_vm._s(task.description))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editDataForm(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteData(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
+            staticStyle: { height: "100%", "background-color": "#c7fff5" }
+          },
+          [
+            _c("div", { staticClass: "container" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "overflow-auto",
+                  staticStyle: { "max-height": "60vh" }
+                },
+                _vm._l(_vm.doneData, function(task) {
+                  return _c("div", { key: task.id, staticClass: "card mb-2" }, [
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("h5", { staticClass: "card-title" }, [
+                        _vm._v(_vm._s(task.title))
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "card-text" }, [
+                        _vm._v(_vm._s(task.description))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editDataForm(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteData(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
+            staticStyle: { height: "100%", "background-color": "#c7fff5" }
+          },
+          [
+            _c("div", { staticClass: "container" }, [
+              _vm._m(4),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "overflow-auto",
+                  staticStyle: { "max-height": "60vh" }
+                },
+                _vm._l(_vm.completedData, function(task) {
+                  return _c("div", { key: task.id, staticClass: "card mb-2" }, [
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("h5", { staticClass: "card-title" }, [
+                        _vm._v(_vm._s(task.title))
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "card-text" }, [
+                        _vm._v(_vm._s(task.description))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editDataForm(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Edit")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { href: "" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.deleteData(task.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              )
+            ])
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center m-5 title-form" }, [
+      _c("h1", [_vm._v("Welcome to Kanban !")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "bg-danger rounded" }, [
+      _c("div", { staticClass: "text-center m-3 p-2" }, [
+        _c("h2", [_vm._v("Back-Log")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "bg-warning rounded" }, [
+      _c("div", { staticClass: "text-center m-3 p-2" }, [
+        _c("h2", [_vm._v("To-Do")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "bg-primary rounded" }, [
+      _c("div", { staticClass: "text-center m-3 p-2" }, [
+        _c("h2", [_vm._v("Done")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "bg-success rounded" }, [
+      _c("div", { staticClass: "text-center m-3 p-2" }, [
+        _c("h2", [_vm._v("Completed")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$216e08', $216e08);
+          } else {
+            api.reload('$216e08', $216e08);
+          }
+        }
+
+        
+      }
+    })();
+},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","axios":"node_modules/axios/index.js","sweetalert2":"node_modules/sweetalert2/dist/sweetalert2.all.js","_css_loader":"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js"}],"src/App.vue":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var vue_1 = __importDefault(require("vue"));
+
+var axios_1 = __importDefault(require("axios"));
+
+var sweetalert2_1 = __importDefault(require("sweetalert2"));
+
+var login_vue_1 = __importDefault(require("./components/login.vue"));
+
+var register_vue_1 = __importDefault(require("./components/register.vue"));
+
+var main_vue_1 = __importDefault(require("./components/main.vue"));
+
+var base_url = 'http://localhost:3000';
+exports.default = vue_1.default.extend({
+  components: {
+    login: login_vue_1.default,
+    register: register_vue_1.default,
+    mainPage: main_vue_1.default
+  },
+  data: function data() {
+    return {
+      page: 'login',
+      task_title: '',
+      task_description: '',
+      task_category: 'Back-Log',
+      edit_title: '',
+      edit_description: '',
+      edit_category: '',
+      edit_id: ''
+    };
+  },
+  created: function created() {
+    if (localStorage.getItem('token')) {
+      this.page = 'main'; // this.getAllTask();
+    }
+  },
+  methods: {
     changePage: function changePage(page) {
       this.page = page;
     },
@@ -14226,7 +14740,7 @@ exports.default = vue_1.default.extend({
     },
     loginUser: function loginUser(data) {
       localStorage.setItem('token', data.token);
-      this.mainPage();
+      this.page = 'main';
       var Toast = sweetalert2_1.default.mixin({
         toast: true,
         position: 'top-end',
@@ -14258,40 +14772,11 @@ exports.default = vue_1.default.extend({
       this.edit_id = '';
     },
     mainPage: function mainPage() {
-      this.getAllTask();
       this.page = 'main';
     },
-    registerUser: function registerUser() {
-      var _this = this;
-
-      if (this.register_password !== this.register_password_confirm) {
-        sweetalert2_1.default.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Make sure you input the same password'
-        });
-      } else {
-        var obj = {
-          email: this.register_email,
-          password: this.register_password
-        };
-        axios_1.default({
-          method: 'POST',
-          url: base_url + '/register',
-          data: obj
-        }).then(function () {
-          _this.reset();
-
-          _this.page = 'login';
-        }).catch(function (err) {
-          _this.showError(err);
-        });
-      }
-    },
-    logOutUser: function logOutUser() {
+    logOutUser: function logOutUser(page) {
       localStorage.removeItem('token');
-      this.reset();
-      this.page = 'login';
+      this.page = page;
       var Toast = sweetalert2_1.default.mixin({
         toast: true,
         position: 'top-end',
@@ -14306,56 +14791,6 @@ exports.default = vue_1.default.extend({
       Toast.fire({
         icon: 'success',
         title: 'Log out successfully'
-      });
-    },
-    getAllTask: function getAllTask() {
-      var _this = this;
-
-      axios_1.default({
-        method: 'GET',
-        url: base_url + '/tasks',
-        headers: {
-          token: localStorage.getItem('token')
-        }
-      }).then(function (_a) {
-        var data = _a.data;
-        _this.task = [];
-        data.forEach(function (x) {
-          _this.task.push(x);
-        });
-      }).catch(function (err) {
-        _this.showError(err);
-      });
-    },
-    deleteData: function deleteData(id) {
-      var _this = this;
-
-      sweetalert2_1.default.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(function (result) {
-        if (result.value) {
-          axios_1.default({
-            method: 'DELETE',
-            url: base_url + ("/tasks/" + id),
-            headers: {
-              token: localStorage.getItem('token')
-            }
-          }).then(function () {
-            sweetalert2_1.default.fire('Deleted!', 'Your file has been deleted.', 'success');
-
-            _this.reset();
-
-            _this.mainPage();
-          }).catch(function (err) {
-            _this.showError(err);
-          });
-        }
       });
     },
     createTask: function createTask() {
@@ -14489,373 +14924,9 @@ exports.default = vue_1.default.extend({
         : _vm._e(),
       _vm._v(" "),
       _vm.page === "main"
-        ? _c("div", [
-            _c("div", { attrs: { id: "navbar-page" } }, [
-              _c(
-                "nav",
-                {
-                  staticClass:
-                    "navbar navbar-expand-lg navbar-light bg-dark mb-3"
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "navbar-brand text-light",
-                      attrs: { href: "" },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.mainPage($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Kanban")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "collapse navbar-collapse",
-                      attrs: { id: "navbarNav" }
-                    },
-                    [
-                      _c("ul", { staticClass: "navbar-nav" }, [
-                        _c("li", { staticClass: "nav-item" }, [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "btn btn-primary mr-2",
-                              attrs: { href: "" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.addTaskForm($event)
-                                }
-                              }
-                            },
-                            [_vm._v("Add Task")]
-                          )
-                        ])
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-info",
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.logOutUser($event)
-                        }
-                      }
-                    },
-                    [_vm._v("Sign Out")]
-                  )
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "container" }, [
-              _c(
-                "div",
-                { staticClass: "d-flex flex-row justify-content-center" },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
-                      staticStyle: {
-                        height: "100%",
-                        "background-color": "#c7fff5"
-                      }
-                    },
-                    [
-                      _c("div", { staticClass: "container" }, [
-                        _vm._m(1),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass: "overflow-auto",
-                            staticStyle: { "max-height": "60vh" }
-                          },
-                          _vm._l(_vm.backlogData, function(task) {
-                            return _c(
-                              "div",
-                              { key: task.id, staticClass: "card mb-2" },
-                              [
-                                _c("div", { staticClass: "card-body" }, [
-                                  _c("h5", { staticClass: "card-title" }, [
-                                    _vm._v(_vm._s(task.title))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("p", { staticClass: "card-text" }, [
-                                    _vm._v(_vm._s(task.description))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.editDataForm(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Edit")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.deleteData(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Delete")]
-                                  )
-                                ])
-                              ]
-                            )
-                          }),
-                          0
-                        )
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
-                      staticStyle: {
-                        height: "100%",
-                        "background-color": "#c7fff5"
-                      }
-                    },
-                    [
-                      _c("div", { staticClass: "container" }, [
-                        _vm._m(2),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass: "overflow-auto",
-                            staticStyle: { "max-height": "60vh" }
-                          },
-                          _vm._l(_vm.todoData, function(task) {
-                            return _c(
-                              "div",
-                              { key: task.id, staticClass: "card mb-2" },
-                              [
-                                _c("div", { staticClass: "card-body" }, [
-                                  _c("h5", { staticClass: "card-title" }, [
-                                    _vm._v(_vm._s(task.title))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("p", { staticClass: "card-text" }, [
-                                    _vm._v(_vm._s(task.description))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.editDataForm(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Edit")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.deleteData(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Delete")]
-                                  )
-                                ])
-                              ]
-                            )
-                          }),
-                          0
-                        )
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
-                      staticStyle: {
-                        height: "100%",
-                        "background-color": "#c7fff5"
-                      }
-                    },
-                    [
-                      _c("div", { staticClass: "container" }, [
-                        _vm._m(3),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass: "overflow-auto",
-                            staticStyle: { "max-height": "60vh" }
-                          },
-                          _vm._l(_vm.doneData, function(task) {
-                            return _c(
-                              "div",
-                              { key: task.id, staticClass: "card mb-2" },
-                              [
-                                _c("div", { staticClass: "card-body" }, [
-                                  _c("h5", { staticClass: "card-title" }, [
-                                    _vm._v(_vm._s(task.title))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("p", { staticClass: "card-text" }, [
-                                    _vm._v(_vm._s(task.description))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.editDataForm(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Edit")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.deleteData(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Delete")]
-                                  )
-                                ])
-                              ]
-                            )
-                          }),
-                          0
-                        )
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4",
-                      staticStyle: {
-                        height: "100%",
-                        "background-color": "#c7fff5"
-                      }
-                    },
-                    [
-                      _c("div", { staticClass: "container" }, [
-                        _vm._m(4),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass: "overflow-auto",
-                            staticStyle: { "max-height": "60vh" }
-                          },
-                          _vm._l(_vm.completedData, function(task) {
-                            return _c(
-                              "div",
-                              { key: task.id, staticClass: "card mb-2" },
-                              [
-                                _c("div", { staticClass: "card-body" }, [
-                                  _c("h5", { staticClass: "card-title" }, [
-                                    _vm._v(_vm._s(task.title))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("p", { staticClass: "card-text" }, [
-                                    _vm._v(_vm._s(task.description))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.editDataForm(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Edit")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "btn btn-primary",
-                                      attrs: { href: "" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.deleteData(task.id)
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("Delete")]
-                                  )
-                                ])
-                              ]
-                            )
-                          }),
-                          0
-                        )
-                      ])
-                    ]
-                  )
-                ]
-              )
-            ])
-          ])
+        ? _c("mainPage", {
+            on: { showError: _vm.showError, logOutUser: _vm.logOutUser }
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.page === "create-task"
@@ -14928,7 +14999,7 @@ exports.default = vue_1.default.extend({
               )
             ]),
             _vm._v(" "),
-            _vm._m(5),
+            _vm._m(0),
             _vm._v(" "),
             _c("div", { staticClass: "container" }, [
               _c("div", { staticClass: "row justify-content-center" }, [
@@ -15148,7 +15219,7 @@ exports.default = vue_1.default.extend({
               )
             ]),
             _vm._v(" "),
-            _vm._m(6),
+            _vm._m(1),
             _vm._v(" "),
             _c("div", { staticClass: "container" }, [
               _c("div", { staticClass: "row justify-content-center" }, [
@@ -15307,54 +15378,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "text-center m-5 title-form" }, [
-      _c("h1", [_vm._v("Welcome to Kanban !")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-danger rounded" }, [
-      _c("div", { staticClass: "text-center m-3 p-2" }, [
-        _c("h2", [_vm._v("Back-Log")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-warning rounded" }, [
-      _c("div", { staticClass: "text-center m-3 p-2" }, [
-        _c("h2", [_vm._v("To-Do")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-primary rounded" }, [
-      _c("div", { staticClass: "text-center m-3 p-2" }, [
-        _c("h2", [_vm._v("Done")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-success rounded" }, [
-      _c("div", { staticClass: "text-center m-3 p-2" }, [
-        _c("h2", [_vm._v("Completed")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "text-center m-5 title-form" }, [
       _c("h1", [_vm._v("Create A New Task")])
     ])
   },
@@ -15395,7 +15418,7 @@ render._withStripped = true
         
       }
     })();
-},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","axios":"node_modules/axios/index.js","sweetalert2":"node_modules/sweetalert2/dist/sweetalert2.all.js","./components/login.vue":"src/components/login.vue","./components/register.vue":"src/components/register.vue","_css_loader":"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js"}],"src/main.js":[function(require,module,exports) {
+},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","axios":"node_modules/axios/index.js","sweetalert2":"node_modules/sweetalert2/dist/sweetalert2.all.js","./components/login.vue":"src/components/login.vue","./components/register.vue":"src/components/register.vue","./components/main.vue":"src/components/main.vue","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
 var _vue = _interopRequireDefault(require("vue"));

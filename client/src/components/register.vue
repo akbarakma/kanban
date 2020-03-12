@@ -49,7 +49,7 @@ export default Vue.extend({
     },
     methods: {
         loginForm() {
-            this.$emit('changeForm', 'login');
+            this.$emit('changePage', 'login');
         },
         registerUser() {
             if (this.register_password !== this.register_password_confirm) {
