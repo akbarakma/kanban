@@ -23,7 +23,18 @@
         @changePage="changePage"
         @showError="showError"
         @logOutUser="logOutUser"
+        @editDataForm="editDataForm"
     ></mainPage>
+
+    <!-- EDIT TASK -->
+
+    <editTask
+        v-if="page === 'editTask'"
+        :editId="editId"
+        @changePage="changePage"
+        @showError="showError"
+        @logOutUser="logOutUser"
+    ></editTask>
 
     <!--CREATE TASK-->
 
@@ -31,6 +42,7 @@
         v-if="page === 'createTask'"
         @changePage="changePage"
         @logOutUser="logOutUser"
+        @showError="showError"
     ></createTask>
 
 </div>
@@ -47,17 +59,20 @@ import login from './components/login.vue';
 import register from './components/register.vue';
 import mainPage from './components/main.vue';
 import createTask from './components/createTask.vue';
+import editTask from './components/editTask.vue';
 
 export default Vue.extend({
     components: {
         login,
         register,
         mainPage,
-        createTask
+        createTask,
+        editTask
     },
     data() {
         return {
-            page:'login'
+            page:'login',
+            editId: null
         }
     },
     created() {
@@ -106,6 +121,10 @@ export default Vue.extend({
                 icon: 'success',
                 title: 'Log out successfully'
             })
+        },
+        editDataForm(id){
+            this.editId = id;
+            this.page = 'editTask';
         },
         showError(err) {
             let msg = null;

@@ -16,6 +16,7 @@ function authentication(req, res, next) {
                     } else {
                         req.UserData = decoded;
                         next();
+                        return null;
                     }
                 }).catch(err => {
                     throw err;
