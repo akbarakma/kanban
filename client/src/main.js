@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
-  clientId: '691541468197-akoajlshfo4cvspfhu10l3q83cf2pj81.apps.googleusercontent.com'
+  clientId: '3709380928-t23aavhno1rvnm0lkukgtrke3d50vaq7.apps.googleusercontent.com'
 }
 Vue.use(GAuth, gauthOption)
 
