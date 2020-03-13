@@ -32,7 +32,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
-const base_url = 'http://localhost:3000';
+const base_url = 'https://evening-oasis-81239.herokuapp.com';
 
 
 export default Vue.extend({
@@ -44,6 +44,7 @@ export default Vue.extend({
     },
     methods: {
         onSuccess() {
+            console.log('masuk');
             this.$gAuth.signIn()
             .then( GoogleUser => {
                 let token = GoogleUser.getAuthResponse().id_token;

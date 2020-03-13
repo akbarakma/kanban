@@ -44,7 +44,7 @@
 <script>
 import axios from 'axios';
 import navbar from './navbar.vue';
-const base_url = 'http://localhost:3000';
+const base_url = 'https://evening-oasis-81239.herokuapp.com';
 
 export default {
     components: {
