@@ -7,9 +7,6 @@
     ></navbar>
     <!--  NAVBAR DIATAS  -->
     <div v-if="page === 'main'">
-        <div class="text-center m-5 title-form">
-            <h1>Welcome to Kanban !</h1>
-        </div>
         <div class="container">
             <div class="d-flex flex-row justify-content-center">
                 <!-- ====== -->

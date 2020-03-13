@@ -18,9 +18,9 @@
                         <input type="password" class="form-control" v-model="login_password" >
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
+                    <button class="btn btn-primary" @click.prevent="onSuccess">Sign In with Google</button>
                     </form>
                 <a href="" v-on:click.prevent="signUpForm" class="mb-3">Don't have an account? Register</a>
-                <div id="google-signin-btn"></div>
             </div>
         </div>
     </div>
@@ -34,6 +34,7 @@ import Vue from 'vue';
 import axios from 'axios';
 const base_url = 'http://localhost:3000';
 
+
 export default Vue.extend({
     data() {
         return {
@@ -41,15 +42,18 @@ export default Vue.extend({
             login_password: '',
         }
     },
-    mounted() {
-        gapi.signin2.render('google-signin-btn', {
-            onsuccess: this.onSignIn
-        })
-    },
     methods: {
-        onSignIn(googleUser) {
-            let id_token = googleUser.getAuthResponse().id_token;
-            let obj = { token: id_token };
+        onSuccess() {
+            this.$gAuth.signIn()
+            .then( GoogleUser => {
+                let token = GoogleUser.getAuthResponse().id_token;
+                this.onSignIn(token);
+            }).catch( err => {
+                console.log(err);
+            })
+        },
+        onSignIn(token) {
+            let obj = { token };
             axios({
                 method: 'POST',
                 url: base_url + '/googlelogin',

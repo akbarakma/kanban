@@ -104,10 +104,8 @@ export default Vue.extend({
             })
         },
         logOutUser(page) {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(() => {
-                this.page = page;
-            });
+            this.$gAuth.signOut()
+            this.page = page;
             localStorage.removeItem('token');
             const Toast = Swal.mixin({
                 toast: true,

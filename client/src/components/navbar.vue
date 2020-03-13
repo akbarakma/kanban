@@ -1,6 +1,6 @@
 <template>
     <div id="navbar-page">
-        <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3">
+        <nav class="navbar navbar-expand-sm navbar-expand-xs navbar-light bg-dark mb-3">
             <a class="navbar-brand text-light" v-on:click.prevent="mainPage" href="">Kanban</a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
@@ -21,7 +21,6 @@ export default {
             this.$emit('mainPage');
         },
         logOutUser() {
-            
             this.$emit('logOutUser', 'login');
         },
         addTaskForm() {
