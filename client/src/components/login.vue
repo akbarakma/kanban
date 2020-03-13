@@ -44,7 +44,6 @@ export default Vue.extend({
     },
     methods: {
         onSuccess() {
-            console.log('masuk');
             this.$gAuth.signIn()
             .then( GoogleUser => {
                 let token = GoogleUser.getAuthResponse().id_token;
