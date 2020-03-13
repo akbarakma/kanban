@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
     "sweetalert2": "^9.10.0",
     "vue": "^2.6.11",
     "vue-google-oauth2": "^1.4.0",
