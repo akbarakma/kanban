@@ -5,6 +5,7 @@ const tasks = require('./tasks');
 
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
+router.post('/googlelogin', UserController.googleLogin);
 router.use(authentication);
 router.use('/tasks', tasks);
 

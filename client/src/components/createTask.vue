@@ -1,15 +1,11 @@
 <template>
 
     <div>
-        <div id="navbar-page">
-            <nav class="navbar navbar-expand-lg navbar-light bg-dark mb-3">
-                <a class="navbar-brand text-light" v-on:click.prevent="mainPage" href="">Kanban</a>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    
-                </div>
-                <button class="btn btn-info" v-on:click.prevent="logOutUser">Sign Out</button>
-            </nav>
-        </div>
+        <navbar
+            @mainPage="mainPage"
+            @logOutUser="logOutUser"
+            @addTaskForm="addTaskForm"
+        ></navbar>
         <!--  NAVBAR DIATAS  -->
         <div class="text-center m-5 title-form">
             <h1>Create A New Task</h1>
@@ -47,9 +43,13 @@
 
 <script>
 import axios from 'axios';
+import navbar from './navbar.vue';
 const base_url = 'http://localhost:3000';
 
 export default {
+    components: {
+        navbar
+    },
     data() {
         return {
             task_title: '',
@@ -83,6 +83,9 @@ export default {
         },
         logOutUser() {
             this.$emit('logOutUser', 'login');
+        },
+        addTaskForm() {
+            this.$emit('changePage', 'createTask');
         }
     }
 }

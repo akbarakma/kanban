@@ -104,6 +104,7 @@ export default Vue.extend({
             })
         },
         logOutUser(page) {
+
             localStorage.removeItem('token');
             this.page = page;
             const Toast = Swal.mixin({
