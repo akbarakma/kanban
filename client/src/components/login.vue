@@ -19,7 +19,8 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
                     </form>
-                <a href="" v-on:click.prevent="signUpForm">Don't have an account? Register</a>
+                <a href="" v-on:click.prevent="signUpForm" class="mb-3">Don't have an account? Register</a>
+                <div id="google-signin-btn"></div>
             </div>
         </div>
     </div>
@@ -40,7 +41,26 @@ export default Vue.extend({
             login_password: '',
         }
     },
+    mounted() {
+        gapi.signin2.render('google-signin-btn', {
+            onsuccess: this.onSignIn
+        })
+    },
     methods: {
+        onSignIn(googleUser) {
+            let id_token = googleUser.getAuthResponse().id_token;
+            let obj = { token: id_token };
+            axios({
+                method: 'POST',
+                url: base_url + '/googlelogin',
+                data: obj
+            })
+            .then(({ data }) => {
+                this.$emit('loginUser', data);
+            }).catch(err => {
+                this.$emit('showError', err);
+            })
+        },
         signUpForm() {
             this.login_email = ''
             this.login_password = ''

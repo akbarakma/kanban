@@ -21,6 +21,7 @@ export default {
             this.$emit('mainPage');
         },
         logOutUser() {
+            
             this.$emit('logOutUser', 'login');
         },
         addTaskForm() {

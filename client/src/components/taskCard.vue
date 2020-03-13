@@ -1,5 +1,5 @@
 <template>
-<div class="overflow-auto" style="max-height: 60vh;" v-if="task.category === category">
+<div v-if="task.category === category">
     <div class="card mb-2">
         <div class="card-body">
             <h5 class="card-title">{{ task.title }}</h5>

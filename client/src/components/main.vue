@@ -20,13 +20,15 @@
                                 <h2>{{ category.name }}</h2>
                             </div>
                         </div>
-                        <div :key="task.index" v-for="task in task">
-                            <taskCard
-                                :category="category.name"
-                                :task="task"
-                                @editDataForm="editDataForm"
-                                @deleteData="deleteData"
-                            ></taskCard>
+                        <div class="overflow-auto" style="max-height: 60vh;">
+                            <div :key="task.index" v-for="task in task">
+                                <taskCard
+                                    :category="category.name"
+                                    :task="task"
+                                    @editDataForm="editDataForm"
+                                    @deleteData="deleteData"
+                                ></taskCard>
+                            </div>
                         </div>
                     </div>
                 </div>
