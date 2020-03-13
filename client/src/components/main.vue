@@ -9,33 +9,20 @@
     <div v-if="page === 'main'">
         <div class="container">
             <div class="d-flex flex-row justify-content-center">
-                <!-- ====== -->
-                <div v-for="category in categories" :key="category.index" class="col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4" style="height: 100%; background-color: #c7fff5">
-                    <div class="container">
-                        <div :class="category.class">
-                            <div class="text-center m-3 p-2">
-                                <h2>{{ category.name }}</h2>
-                            </div>
-                        </div>
-                        <div class="overflow-auto" style="max-height: 60vh;">
-                            <div :key="task.index" v-for="task in task">
-                                <taskCard
-                                    :category="category.name"
-                                    :task="task"
-                                    @editDataForm="editDataForm"
-                                    @deleteData="deleteData"
-                                ></taskCard>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- ===== -->
+                <task
+                    class="col-sm-3 rounded ml-2 mr-2 pl-2 pr-2 pb-4" style="height: 100%; background-color: #c7fff5"
+                    v-for="category in categories"
+                    :key="category.index"
+                    :category="category"
+                    :task="task"
+                    @editDataForm="editDataForm"
+                    @deleteData="deleteData"
+                ></task>
                 <!-- ===== -->
             </div>
         </div>
     </div>
-
-
-
 </div>
 </template>
 
@@ -45,12 +32,14 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import taskCard from './taskCard.vue';
 import navbar from './navbar.vue';
+import task from './task.vue';
 const base_url = 'http://localhost:3000';
 
 export default Vue.extend({
     components: {
         taskCard,
-        navbar
+        navbar,
+        task
     },
     data() {
         return {
