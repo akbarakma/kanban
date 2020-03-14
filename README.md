@@ -2,7 +2,7 @@
 ## [https://project-kanban-d2173.firebaseapp.com/](https://project-kanban-d2173.firebaseapp.com/)
 
 # Endpoint:
-## [http://localhost:3000](http://localhost:3000)
+## [https://evening-oasis-81239.herokuapp.com/](https://evening-oasis-81239.herokuapp.com/)
 
 # POST /register
 ## Endpoint
